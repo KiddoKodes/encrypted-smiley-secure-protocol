@@ -376,11 +376,9 @@ function parseData(data, currentCommand, protocolVersion = 6, deviceUnitType) {
               info.value = [];
               if (chunk.length > 2) {
                 if (info.name == 'COIN_CREDIT') {
-
                   for (let i = 0; i < count; i++) {
-
                     info.value[i] = {
-                      value: Buffer.from(chunk.slice((i * 7) + 3, (i * 7) + 6)).readUInt8(),
+                      value: Buffer.from(chunk.slice((i * 7) + 3, (i * 7) + 6)).readInt16LE(),
 
                       country_code: Buffer.from(chunk.slice((i * 7) + 6, (i * 7) + 9)).toString()
                     };
