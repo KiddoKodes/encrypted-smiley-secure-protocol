@@ -87,24 +87,24 @@ module.exports = class SSP extends EventEmitter {
 
   initEncryption() {
     return Promise.all([
-      BigInt(982451653),
-      BigInt(1287821),
-      BigInt(5)
+      BigInt(crypto.createDiffieHellman(16).getPrime().readUInt16BE()),
+      BigInt(crypto.createDiffieHellman(16).getPrime().readUInt16BE()),
+      BigInt(crypto.createDiffieHellman(16).getPrime().readUInt16BE()),
     ])
       .then(res => {
-        this.keys.generatorKey = res[0];
-        this.keys.modulusKey = res[1];
-        this.keys.hostRandom = res[2];
-        this.keys.hostIntKey = this.keys.generatorKey ** this.keys.hostRandom % this.keys.modulusKey;
-        return;
+        this.keys.generatorKey = res[0]
+        this.keys.modulusKey = res[1]
+        this.keys.hostRandom = res[2]
+        this.keys.hostIntKey = this.keys.generatorKey ** this.keys.hostRandom % this.keys.modulusKey
+        return
       })
       .then(() => this.exec('SET_GENERATOR', int64LE(this.keys.generatorKey)))
       .then(() => this.exec('SET_MODULUS', int64LE(this.keys.modulusKey)))
       .then(() => this.exec('REQUEST_KEY_EXCHANGE', int64LE(this.keys.hostIntKey)))
       .then(() => {
-        this.count = 0;
-        return;
-      });
+        this.count = 0
+        return
+      })
   }
 
   getPacket(command, args) {
